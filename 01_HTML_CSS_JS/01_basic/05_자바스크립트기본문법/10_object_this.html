@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script>
+            class Person {
+                constructor(name) {
+                    this.naem = name;
+                }
+
+                eat(food) {
+                    alert(this.naem + "이 " + food + "을 먹습니다.");
+                }
+            }
+
+            let person1 = new Person("김혜빈");
+            let person2 = new Person("김해분");
+            let person3 = new Person("김빈해");
+
+            person1.eat("마라탕");
+            person2.eat("마라샹궈");
+            person3.eat("훠궈");
+
+            // let person = {
+            //     name: "윤인성",
+            //     eat: function (food) {
+            //         alert(this.naem + "이 " + food + "을 먹습니다.");
+            //     },
+            // };
+        </script>
+    </head>
+    <body></body>
+</html>

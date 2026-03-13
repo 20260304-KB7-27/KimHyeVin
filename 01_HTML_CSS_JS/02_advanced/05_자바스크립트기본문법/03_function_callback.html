@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script>
+            function callBackTest(cnt, callBackfn) {
+                for (let i = 0; i < cnt; i++) callBackfn;
+            }
+
+            function cbFn() {
+                alert("호출 함수");
+            }
+            callBackTest(3, cbFn);
+
+            // 익명 함수
+            // callBackTest(5, function () {
+            //     alert("호출 함수");
+            // });
+        </script>
+    </head>
+
+    <body></body>
+</html>
