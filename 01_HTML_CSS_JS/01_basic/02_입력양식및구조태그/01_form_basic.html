@@ -19,7 +19,7 @@
                         input
                         name : 서버로 전송될 때 사용되는 이름
                         id   : html 요소의 고유식별자
-                        type : 
+                        type : 입력필드의 종류
                     -->
                     <td><input id="username" name="username" type="text" /></td>
                 </tr>
@@ -28,16 +28,11 @@
                     <td>성별</td>
                     <td>
                         <!-- 
-
+                            value : 서버에 전송될 때 전송되는 값
                         -->
                         <input type="radio" id="man" name="gender" value="m" />
                         <label for="man">남자</label>
-                        <input
-                            type="radio"
-                            id="woman"
-                            name="gender"
-                            value="w"
-                        />
+                        <input type="radio" id="woman" name="gender" value="w" />
                         <label for="woman">여자</label>
                     </td>
                 </tr>
