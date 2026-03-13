@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script>
+            window.onload = function () {
+                // querySelectorAll - 주어진 CSS 선택자에 일치하는 모든 요소를 선택
+                // Nodelist로 반환(유사배열)
+                const headers = document.querySelector("h1");
+                // 원하는 인덱스값으로 가져올 수 잇음
+                // 배열 메서드 사용 x -> for
+                const header1 = document.querySelector("h1")[0];
+                header1.style.color = "red";
+
+                console.log(headers);
+
+                for (let i = 0; i < headers.length; i++) {
+                    let header = headers[i];
+                    header.style.color = "orange";
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <h1>Header</h1>
+        <h1 class="classtest">Header</h1>
+        <h1 id="idtest">Header</h1>
+    </body>
+</html>

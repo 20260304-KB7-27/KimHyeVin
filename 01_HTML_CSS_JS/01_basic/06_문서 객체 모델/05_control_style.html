@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script>
+            window.onload = function () {
+                // ? wow.....?
+                let outPut = "";
+
+                for (let i = 0; i < 256; i++) {
+                    outPut += "<div></div>";
+                }
+
+                document.body.innerHTML = outPut;
+
+                let divs = document.querySelectorAll("div");
+
+                for (let i = 0; i < divs.length; i++) {
+                    let div = divs[i];
+
+                    // style pick
+                    // oldddddddddddddddddddddddddddddddddddd
+                    div.style.height = "2px";
+                    div.style.backgroundColor = `rgb(${i}, ${i}, ${i})`;
+                }
+            };
+        </script>
+    </head>
+    <body></body>
+</html>
