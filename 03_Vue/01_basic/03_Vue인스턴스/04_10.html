@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vue 3 연습용 Composition</title>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <div id="app">
+                1보다 큰 수: <input type="text" v-model.number="num" /><br />
+                1부터 입력한 값까지의 합: <span>{{sum}}</span><br />
+            </div>
+        </div>
+
+        <script>
+            const { createApp, ref, computed, onMounted, onUpdated } = Vue;
+
+            createApp({
+                setup() {
+                    console.log("인스턴스 생성됩니다?");
+                    const num = ref(0);
+
+                    /**
+                     * setup 함수 자체가 created 역할을 함
+                     * 컴포넌트 초기화, API호출, 이벤트 리스너 설정 등
+                     */
+
+                    const sum = computed(() => {
+                        if (num.value === 0) return 0;
+                        return (num.value * (num.value + 1)) / 2;
+                    });
+
+                    // DOM 마운트 완료 후
+                    /**
+                     * onMounted 컴포넌트가 DOM에 마운트 된 후 실행
+                     * 외부 라이브러리 초기화(지도)
+                     * DOM 요소에 접근하거나 조작 할 수 있음
+                     * **/
+                    onMounted(() => {
+                        console.log("mounted 실행");
+                    });
+
+                    // 반응형 값 바뀌고 DOM 업데이트 후
+                    /**
+                     * onUpdated  컴포넌트의 데이터가 변경되어 dom이 업데이트 된 후 실행
+                     * **/
+                    onUpdated(() => {
+                        console.log("updated 실행");
+                    });
+                    return { num, sum };
+                },
+            }).mount("#app");
+        </script>
+    </body>
+</html>
