@@ -12,15 +12,15 @@
                 <!-- 
                 1000000,500000,200000
                 -->
-                잔고: <input v-model="balance" />
+                잔고: <input type="number" v-model.number="balance" />
                 <br />
                 회원님의 등급:
-                <!-- 수정필요.... -->
-                <span v-if="balance => 1000000">Gold</span>
-                <span v-if="balance => 500000 && balance < 1000000"
+                <!-- 화살표 표시는  >= 가능 =가 나중으로 가야지 연산자로 인식함 -->
+                <span v-if="balance >= 1000000">Gold</span>
+                <span v-if="balance >= 500000 && balance < 1000000"
                     >Silver</span
                 >
-                <span v-if="balance => 200000 && balance < 500000">Bronze</span>
+                <span v-if="balance >= 200000 && balance < 500000">Bronze</span>
                 <span v-if="balance < 200000">Basic</span>
             </div>
         </div>

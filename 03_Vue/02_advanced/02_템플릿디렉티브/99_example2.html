@@ -13,8 +13,8 @@
             <!-- 아래의 목록을 완성하세요 -->
             <ul>
                 <li
-                    class=""
-                    v-for="(post, index) in posts"
+                    v-for="post in posts"
+                    :key="post.no"
                     @click="clickEvent(post)"
                 >
                     <div class="post-item">
@@ -24,21 +24,14 @@
                         >
                         <span v-else>▼</span>
                     </div>
-
-                    <p></p>
                     <!-- 타겟 값 설정하기...값이있으면....show...로.... -->
                     <div
                         class="post-content"
                         v-if="targetItem && post.no === targetItem.no"
                     >
-                        <div
-                            v-for="(value, key, index) in targetItem"
-                            :key="index"
-                        >
-                            <h1 v-if="key === 'title'">{{ value }}</h1>
-                            <p v-if="key === 'content'">{{value}}</p>
-                        </div>
-                        <button class="button" @click.stop="resetEvent()">
+                        <h2>{{ targetItem.title }}</h2>
+                        <p>{{ targetItem.content }}</p>
+                        <button class="button" @click.stop="resetEvent">
                             닫기
                         </button>
                     </div>
@@ -113,20 +106,19 @@
                         },
                     ]);
 
-                    let targetItem = ref(null);
+                    const targetItem = ref(null);
                     // 아래에 화면처럼 동작하도록 구현해보세요
                     const clickEvent = (post) => {
-                        // 값이 있다면 삭제
-                        if (targetItem.value != null) {
+                        if (targetItem.value !== null) {
                             resetEvent();
-                        } else {
-                            targetItem.value = post;
+                            return;
                         }
-                        console.log("item: " + targetItem.value);
+
+                        targetItem.value = post;
                     };
                     const resetEvent = () => {
                         targetItem.value = null;
-                        console.log("리셋: " + targetItem.value);
+                        // console.log("리셋: " + targetItem.value);
                     };
                     return {
                         posts,
