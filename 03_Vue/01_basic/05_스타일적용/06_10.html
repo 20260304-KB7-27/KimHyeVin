@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vue 3 연습용 Composition</title>
+        <!-- font-awsome 라이브러리 가져오기 -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        />
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <h2>1부터 100까지만 입력가능합니다.</h2>
+            <span> 점수: </span>
+            <input
+                type="text"
+                v-model.number="inputNum"
+                :style="{ backgroundColor: (0 >inputNum || inputNum > 100) ? 'aqua' : 'white' }"
+            />
+            <i
+                v-if="0 >inputNum || inputNum > 100"
+                class="fa-solid fa-circle-exclamation"
+            ></i>
+        </div>
+
+        <script>
+            const { createApp, ref } = Vue;
+
+            createApp({
+                setup() {
+                    const inputNum = ref(0);
+                    return { inputNum };
+                },
+            }).mount("#app");
+        </script>
+    </body>
+</html>
