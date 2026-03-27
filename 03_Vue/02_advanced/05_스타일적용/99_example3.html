@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Vue 게시판 목록</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="app">
+    <h1 class="title">📌 게시판 목록 v3</h1>
+
+    <section id="input-box">
+        <input type="text" v-model="newPost.title" placeholder="새 게시글 제목">
+        <input type="text" v-model="newPost.content" placeholder="새 게시글 내용">
+
+        <button class="write-button" @click="saveEvent('newPost')">
+            작성
+        </button>
+
+    </section>
+    <!-- 아래의 목록을 완성하세요 -->
+    <ul>
+        <li v-for="post in sortPost" :key="post.no">
+            <div class="post-item" @click="clickEvent(post)">
+                {{post.no}}.
+                {{post.title}}
+                <span v-if="showPost && post.no === showPost.no" class="toggle-color">▲</span>
+                <span v-else class="toggle-color">▼</span>
+            </div>
+
+            <!-- clickEvent 클릭시 보여줌 && editEvent클릭시 숨김 -->
+            <div class="post-content" v-if="!editPost && (showPost && post.no === showPost.no)">
+                <h2>{{ showPost.title }}</h2>
+                <p>{{ showPost.content }}</p>
+                <button class="button" @click.stop="editEvent">
+                    수정
+                </button>
+                <button class="button" @click.stop="deleteEvent">
+                    삭제
+                </button>
+                <button class="button" @click.stop="resetEvent('showPost')">
+                    닫기
+                </button>
+            </div>
+
+            <!-- editEvent 클릭시 보여줌 && 저장/취소 시 숨김 -->
+            <div class="post-content" v-if="editPost && editPost.no === post.no">
+                <div>
+                    <input type="text" :value="editPost.title" placeholder="새 게시글 제목"
+                           @input="inputHandler('title', $event.target.value)">
+                </div>
+                <div>
+                    <textarea :value="editPost.content"
+                              @input="inputHandler('content', $event.target.value)"></textarea>
+                </div>
+                <button class="button" @click.stop="saveEvent('editPost')">
+                    저장
+                </button>
+                <button class="button" @click.stop="resetEvent('editPost')">
+                    취소
+                </button>
+            </div>
+        </li>
+    </ul>
+</div>
+<script>
+    const {createApp, ref, computed} = Vue;
+
+    createApp({
+        setup() {
+            const posts = ref([
+                {
+                    no: 1,
+                    title: "Vue.js 기초 배우기",
+                    content:
+                        "Vue.js는 사용자 인터페이스를 구축하기 위한 프로그레시브 프레임워크입니다.",
+                },
+                {
+                    no: 2,
+                    title: "자바스크립트 ES6 문법",
+                    content:
+                        "ES6는 JavaScript의 최신 문법을 포함하며, let/const, 화살표 함수, 구조 분해 할당 등을 제공합니다.",
+                },
+                {
+                    no: 3,
+                    title: "Node.js와 Express",
+                    content:
+                        "Node.js는 서버 측에서 JavaScript를 실행할 수 있도록 하는 런타임이며, Express는 이를 위한 경량 웹 프레임워크입니다.",
+                },
+                {
+                    no: 4,
+                    title: "MongoDB 기본 개념",
+                    content:
+                        "MongoDB는 NoSQL 데이터베이스로 JSON과 유사한 문서 기반 데이터를 저장하고 관리할 수 있습니다.",
+                },
+                {
+                    no: 5,
+                    title: "프론트엔드와 백엔드의 차이",
+                    content:
+                        "프론트엔드는 사용자가 보는 부분을 개발하는 것이고, 백엔드는 서버와 데이터베이스를 관리하는 부분입니다.",
+                },
+                {
+                    no: 6,
+                    title: "비동기 프로그래밍",
+                    content:
+                        "JavaScript의 비동기 처리 방식에는 콜백, 프로미스, async/await가 있습니다.",
+                },
+                {
+                    no: 7,
+                    title: "Vue Router 사용법",
+                    content:
+                        "Vue Router를 사용하면 Vue.js 애플리케이션에서 페이지 이동을 쉽게 처리할 수 있습니다.",
+                },
+                {
+                    no: 8,
+                    title: "컴포넌트 기반 개발",
+                    content:
+                        "Vue.js에서는 컴포넌트를 사용하여 UI를 작은 단위로 쪼개서 관리할 수 있습니다.",
+                },
+                {
+                    no: 9,
+                    title: "CSS와 SCSS 차이점",
+                    content:
+                        "SCSS는 CSS의 확장된 버전으로 변수, 중첩, 믹스인 등을 지원합니다.",
+                },
+                {
+                    no: 10,
+                    title: "Git과 GitHub 사용법",
+                    content:
+                        "Git은 버전 관리 시스템이며, GitHub는 이를 활용한 원격 저장소 플랫폼입니다.",
+                },
+            ]);
+            const showPost = ref(null);
+            const editPost = ref(null);
+            const newPost = ref({title: '', content: ''});
+
+            // 아래에 화면처럼 동작하도록 구현해보세요
+            // 클릭시 뭔가...딜레이 있을 때 있음...why??
+            const clickEvent = (post) => {
+                if (showPost.value !== null) {
+                    resetEvent('showPost');
+                    return;
+                }
+
+                showPost.value = post;
+            };
+
+            // 닫기 버튼 클릭시 동작하는 이벤트
+            const resetEvent = (flag) => {
+                if (flag === 'showPost') {
+                    showPost.value = null;
+                }
+                editPost.value = null;
+
+                console.log(posts.value);
+            };
+
+            // 작성 버튼 클릭시 동작하는 이벤트
+            const saveEvent = (flag) => {
+                // TODO ::: ??? 왜 자동으로 저장됨....???
+                // TODO ::: title, content 없으면 저장 못하도록 추가
+
+                console.log(flag);
+                // 신규인지 수정인지 확인
+                if (flag === 'newPost') {
+                    // 신규 저장
+                    newPost.value.no = posts.value.length + 1;
+                    posts.value.push(newPost.value);
+                } else {
+                    console.log("index: ", posts.value.indexOf(showPost.value));
+                    console.log("editPost.value: ", editPost.value);
+                    // posts.value[posts.value.indexOf(showPost.value)] = editPost.value;
+                }
+
+                // 저장 후 값 리셋
+                newPost.value = {title: '', content: ''};
+            }
+
+            function inputHandler(type, event) {
+                if (type === 'title') {
+                    this.title = event;
+                } else if (type === 'content') {
+                    this.value.content = event;
+                }
+            }
+
+            // 수정 버튼 클릭시 동작하는 이벤트
+            const editEvent = () => {
+                // console.log('editEvent ::: ', showPost.value);
+
+                // 복사된거임...
+                // {} = showPost.value.title
+                editPost.value = showPost.value;
+                // oldObject = showPost.value;
+            }
+
+            // 삭제 버튼 클릭시 동작하는 이벤트
+            const deleteEvent = () => {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    // 확인ㅠ_ㅜ
+                    // splice...??? 처음 보는 문법....이게...
+                    posts.value.splice(posts.value.indexOf(showPost.value), 1);
+                    showPost.value = null;
+                    editPost.value = null;
+                }
+            }
+
+            const sortPost = computed(() => {
+                return [...posts.value].sort((a, b) => b.no - a.no);
+            })
+
+
+            return {
+                posts,
+                sortPost,
+                newPost,
+                showPost,
+                editPost,
+                inputHandler,
+                clickEvent,
+                resetEvent,
+                saveEvent,
+                editEvent,
+                deleteEvent
+            };
+        },
+    }).mount("#app");
+</script>
+
+<style>
+    h1.title {
+        text-align: center;
+        color: #333;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #input-box {
+        display: flex;
+        justify-content: center;
+    }
+
+    #input-box > input {
+        margin-right: 10px;
+    }
+
+    .post-item {
+        cursor: pointer;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .post-item:hover {
+        background: #f4f4f4;
+    }
+
+    .post-content {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #fff;
+    }
+
+    .toggle-color {
+        color: #a9a9a9;
+    }
+
+    .button {
+        margin-top: 10px;
+        margin-right: 5px;
+        padding: 5px 10px;
+        border: none;
+        background: #ff6b6b;
+        color: white;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    button:hover {
+        background: #ff4f4f;
+    }
+
+    .write-button {
+        padding: 5px 10px;
+        border: none;
+        background: #ff6b6b;
+        color: white;
+        cursor: pointer;
+        border-radius: 3px;
+    }
+
+    .arrow {
+        font-size: 0.8em;
+        color: #888;
+    }
+</style>
+</body>
+</html>
